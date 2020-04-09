@@ -1,26 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Layouts/Header/Header';
+import jwt_decode from 'jwt-decode';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Home from './components/Home/Home';
+import Login from './components/Auth/Login/Login';
+import Register from './components/Auth/Register/Register';
+import { setAuthToken } from './components/Auth/AuthConfig';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from './redux/actions/AuthAction';
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  if (sessionStorage.team) {
+    setAuthToken(sessionStorage.team);
+    const decode = jwt_decode(sessionStorage.team);
+    dispatch(setUser(decode));
+  }
+  const isLoggedIn = useSelector((item) => item.loginReducer.isAutheticated);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      {!isLoggedIn ? (
+        <div className="App">
+          <Header data={isLoggedIn} />
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Register} />
+          </Switch>
+        </div>
+      ) : (
+        <div className="App">
+          <Header data={isLoggedIn} />
+          <Route exact path="/" component={Home} />
+        </div>
+      )}
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
