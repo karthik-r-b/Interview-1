@@ -5,7 +5,9 @@ import { authConfig } from '../../Auth/AuthConfig';
 import jwt_decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../redux/actions/AuthAction';
+import { useAlert } from 'react-alert';
 const Login = (props) => {
+  const alert = useAlert();
   const dispatch = useDispatch();
   const [loginData, setLoginData] = useState([]);
 
@@ -13,7 +15,7 @@ const Login = (props) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
   };
-
+  // fetching API
   const fetchApi = async (loginData) => {
     let result = await loginAuth(loginData);
     if (result.success) {
@@ -24,6 +26,7 @@ const Login = (props) => {
       props.history.push('/');
     } else {
       props.history.push('/login');
+      alert.error('Invalid credentials');
     }
   };
 

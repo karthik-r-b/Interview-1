@@ -4,9 +4,6 @@ const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 module.exports.create = async (req, res) => {
-  if (Object.keys(req.body).length !== 4) {
-    res.status(400).json({ success: false, message: 'Invalid parameters' });
-  }
   let result = {};
   const { email, name, password, confirmPassword } = req.body;
 
@@ -35,10 +32,6 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.findOne = async (req, res) => {
-  if (Object.keys(req.body).length !== 2) {
-    res.status(400).json({ message: 'Invalid parameters' });
-  }
-
   const { email, password } = req.body;
 
   let errResponse = {

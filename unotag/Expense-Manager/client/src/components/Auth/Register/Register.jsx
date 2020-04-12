@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import '../Login/Login.css';
 import { signupAuth } from '../../../url';
+import { useAlert } from 'react-alert';
 
 const Register = (props) => {
+  const alert = useAlert();
   const [signupData, setsignupData] = useState([]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -11,6 +13,10 @@ const Register = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (signupData.password !== signupData.confirmPassword) {
+      alert.error("Passwords Doesn't match");
+      return;
+    }
     fecthData(signupData);
   };
 
@@ -38,6 +44,20 @@ const Register = (props) => {
                       onSubmit={handleSubmit}
                     >
                       <div className="form-group">
+                        <label htmlFor="name">Name</label>
+                        <input
+                          id="Name"
+                          type="text"
+                          className="form-control"
+                          name="name"
+                          title="Must Enter a valid Name"
+                          onChange={handleInputChange}
+                          maxLength="10"
+                          required
+                          autoFocus
+                        />
+                      </div>
+                      <div className="form-group">
                         <label htmlFor="email">E-Mail ID</label>
                         <input
                           id="email"
@@ -45,22 +65,13 @@ const Register = (props) => {
                           className="form-control"
                           name="email"
                           onChange={handleInputChange}
+                          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                          title="Please Enter your valid EmailID"
                           required
                           autoFocus
                         />
                       </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Name</label>
-                        <input
-                          id="Name"
-                          type="text"
-                          className="form-control"
-                          name="name"
-                          onChange={handleInputChange}
-                          required
-                          autoFocus
-                        />
-                      </div>
+
                       <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input
@@ -68,6 +79,8 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           name="password"
+                          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                          title="Your password must contain atleast an alphabet,special character, number"
                           onChange={handleInputChange}
                           required
                         />
@@ -79,6 +92,8 @@ const Register = (props) => {
                           type="password"
                           className="form-control"
                           name="confirmPassword"
+                          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                          title="Your password must contain atleast an alphabet,special character, number"
                           onChange={handleInputChange}
                           required
                         />
