@@ -1,0 +1,6 @@
+.table-hover tbody tr:hover td {
+  background: #28a745;
+}
+.total-expense {
+  width: 30%;
+}
